@@ -15,8 +15,13 @@
 		<header>
 			<h1>Moniteur serie</h1>
 			<form action="" method="post">
-				<select>
-					<option></option>
+				<select name="port">
+					<option value="none">--Aucun port--</option>
+					<c:forEach items="${requestScope.ports}" var="port" varStatus="status">
+					<option value="<c:out value="${port}"/>">
+						<c:out value="${port}"/>
+					</option>
+					</c:forEach>
 				</select>
 				
 				<button type="submit">Valider</button>

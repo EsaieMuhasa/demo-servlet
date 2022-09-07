@@ -74,6 +74,13 @@ public class ArduinoManager implements Runnable, SerialPortEventListener {
 		thread.start();
 	}
 	
+	/**
+	 * renvoie la liste des ports disponible
+	 * @return
+	 */
+	public String[] getPorts () {
+		return ports.toArray(new String[ports.size()]);
+	}
 	
 	/**
 	 * ouverture du port dont le nom symbolique est en parametre
