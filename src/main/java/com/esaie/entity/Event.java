@@ -1,8 +1,12 @@
 package com.esaie.entity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Event {
+	
+	public static final DateFormat DATE_FORMAT = new SimpleDateFormat ("dd/MM/yyyy 'à' hh:mm:ss");
 	
 	private int id;
 	private Date recordDate;
@@ -38,6 +42,12 @@ public class Event {
 
 	public Date getRecordDate() {
 		return recordDate;
+	}
+	
+	public String getFormatRecordDate () {
+		if(recordDate != null)
+			return DATE_FORMAT.format(recordDate);
+		return "";
 	}
 
 	public void setRecordDate(Date recordDate) {

@@ -20,13 +20,25 @@ import com.esaie.entity.Event;
 public class EventRepository {
 	
 	private final ArrayList<RepositotyListener> listeners = new ArrayList<>();
+	
+	private static EventRepository instance;
 
 	/**
 	 * 
 	 */
-	public EventRepository() {
+	private EventRepository() {
 		super();
 		loadDriver();
+	}
+	
+	/**
+	 * recuperation de l'instance du repos
+	 * @return
+	 */
+	public static EventRepository getInstance () {
+		if(instance == null)
+			instance = new EventRepository();
+		return instance;
 	}
 
 	/**
@@ -155,7 +167,7 @@ public class EventRepository {
 		try (
 			Connection connection = getConnection();
 			Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			ResultSet result = statement.executeQuery("SELECT * FROM Event LIMIT"+limit+" OFFSET "+offset);
+			ResultSet result = statement.executeQuery("SELECT * FROM Event LIMIT "+limit+" OFFSET "+offset);
 		) {
 			return readAll(result);
 		} catch (SQLException e){
