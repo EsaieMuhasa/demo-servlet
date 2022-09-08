@@ -25,15 +25,21 @@ public class MainServlet extends HttpServlet implements ArduinoListener {
 	private static final long serialVersionUID = 1L;
 	
 	private EventRepository eventRepository;
-	private ArduinoManager arduinoManager;
+//	private ArduinoManager arduinoManager;
 
 	/**
 	 * @see Servlet#init(ServletConfig)
 	 */
 	public void init() throws ServletException{
 		eventRepository = EventRepository.getInstance();
-		arduinoManager = ArduinoManager.getInstance();
-		arduinoManager.addArduinoListener(this);
+//		arduinoManager = ArduinoManager.getInstance();
+//		arduinoManager.addArduinoListener(this);
+	}
+	
+	@Override
+	public void destroy() {
+		//arduinoManager.dispose();
+		super.destroy();
 	}
 
 	/**
@@ -44,7 +50,7 @@ public class MainServlet extends HttpServlet implements ArduinoListener {
 		int $page  = 0;
 		try {
 			$page = ((int)Double.parseDouble(page)) * 20;
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException | NullPointerException e) {
 			response.sendRedirect("?page=0");
 			return;
 		}
@@ -55,7 +61,8 @@ public class MainServlet extends HttpServlet implements ArduinoListener {
 			return;
 		}
 		
-		String ports[] = arduinoManager.getPorts();
+//		String ports[] = arduinoManager.getPorts();
+		String ports [] = {};
 
 		Event [] events = eventRepository.findAll(20, $page);
 		request.setAttribute("events", events);
@@ -70,11 +77,11 @@ public class MainServlet extends HttpServlet implements ArduinoListener {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String port = request.getParameter("port");
 		
-		if(port == null || port.equals("none")) {
-			arduinoManager.disposeCurrentPort();
-		} else {
-			arduinoManager.open(port);
-		}
+//		if(port == null || port.equals("none")) {
+//			arduinoManager.disposeCurrentPort();
+//		} else {
+//			arduinoManager.open(port);
+//		}
 		
 		response.sendRedirect("?page=0");
 	}
