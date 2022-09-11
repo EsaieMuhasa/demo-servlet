@@ -6,7 +6,11 @@ function onMessage (message) {
     var data = message.data;
 
     var json = JSON.parse(data);
-    updateSelecte(json);
+    if(json.ports){
+        updateSelecte(json);
+    } else {
+        console.log(json);
+    }
 } 
 
 /**
@@ -33,7 +37,7 @@ function onError (error) {
  * mise en jours du select contenant les ports serie (COM port) connecter sur le serveur
  * @param {Object} data 
  * @param {string} data.currentPort le port sur lequel le serveur est actuelement connectee
- * @param {string[]} data.port collection des ports disponible sur le serveur
+ * @param {string[]} data.ports collection des ports disponible sur le serveur
  */
 function updateSelecte (data) {
     var ports = data.ports;
@@ -61,7 +65,8 @@ function updateSelecte (data) {
     }
 }
 
-(function main () {
+
+function main () {
     var host = window.location.hostname;
     var port = window.location.port;
     var url = 'ws://'+host+":"+port+"/demo-servlet/ws";
@@ -73,6 +78,42 @@ function updateSelecte (data) {
     ws.onclose = event => onClose(event);
     ws.onmessage = message => onMessage(message);
     ws.onerror = err => onError(err);
+
+    // var form = document.getElementsByTagName('form')[0];
+    // form.addEventListener('submit', event => {
+    //     event.preventDefault();
+
+    //     var formData = new  FormData(document.getElementsByTagName('form')[0]);
+    //     var port  = form.getElementsByTagName('select')[0].value;
+    //     console.log(port);
+    //     console.log(formData);
+
+    //     var xhr = new  XMLHttpRequest();
+    //     xhr.onload = (e) => {
+    //         console.log(e);
+    //     }
+
+    //     xhr.open("POST", form.getAttribute('action'));
+    //     xhr.send(formData);
+    // });
+
+    var form = document.getElementsByTagName('form')[0];
+    form.addEventListener('submit', event => {
+	
+		event.defaultPrevented();
+        
+        $.ajax({
+            method: "POST",
+            url: form.getAttribute('action'),
+            data: $(form).serialize()
+        }) .done(function(msg) {
+                console.log(msg)
+            });
+    });
     
+}
+
+(() => {
+    window.addEventListener('load', () => main());
 }) ();
 

@@ -9,13 +9,14 @@
 		<title>Moniteur serie</title>
 		<link rel="stylesheet" href="css/style.css">
 		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript" src="js/jquery-3.6.1.min.js"></script>
 </head>
 <body>
 	
 	<div class="content">
 		<header>
 			<h1>Moniteur serie</h1>
-			<form action="" method="post">
+			<form action="<c:url value="/index"/>" method="post">
 				<select name="port">
 					<option value="none">--Aucun port--</option>
 					<c:forEach items="${requestScope.ports}" var="port" varStatus="status">

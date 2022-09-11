@@ -8,9 +8,9 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.stream.JsonGenerator;
 import javax.websocket.OnClose;
@@ -67,8 +67,8 @@ public class WsEndpoint{
 	private class ArduinoAdapter implements ArduinoListener {
 		@Override
 		public void onOpen(String portName) {
-			// TODO Auto-generated method stub
-			
+			String ports [] = manager.getPorts();
+			onConnectedPortChange(ports);
 		}
 		
 		@Override
@@ -91,8 +91,20 @@ public class WsEndpoint{
 		
 		@Override
 		public void onRead(Map<String, String> message) {
-			// TODO Auto-generated method stub
+			StringWriter out = new StringWriter();
+			JsonGenerator gen = Json.createGenerator(out)
+					.writeStartObject();
 			
+			Set<String> keys = message.keySet();
+			for (String key : keys) {
+				gen.write(key, message.get(key));
+			}
+			gen.writeEnd().close();
+			try {
+				session.getBasicRemote().sendText(out.toString());
+			} catch (IOException e) {
+				
+			};
 		}
 		
 		@Override
